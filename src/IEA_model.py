@@ -17,24 +17,28 @@ from scipy.special import expit
 
 class IEA(nn.Module):    
     def __init__(self, loader = None, eval_loader = None, idx_gene = np.arange(18487), 
-                 L = 16, tau = 10., dropout = 0,
-                 alpha = 1., beta = 0.1, gamma = 0., rho = 0., trd = 1e-5, 
-                 lr = 1e-4, lr2 = 1e-2, lr_D = 1e-3, 
-                 n_rep = 5, filename = None, n_patch = 64, seed = 0):
+                 L = 16,
+                 beta = 0.1, gamma = 0.,
+                 n_record = 5, filename = None, n_patch = 32, seed = 0):
         """
         Model initialization.
+        loader is the training data loader.
+        eval_loader is the loader for evaluation.
+        idx_gene is the list of indices of genes selected.
+        L is the number of axes.
+        gamma controls the weight of the HSIC penalty in the objective function.
+        beta controls the weight of the KL divergence in the objective function
+        filename is the filename that save the model.
+        n_patch is the number of randomly selected patches for each subject used during the training.
+        n_record is the number of epochs for logging.
+        seed is the seed for the random number generator.
         """
         
         super(IEA, self).__init__()        
         self.gamma = gamma
-        self.alpha = alpha
         self.beta = beta
-        self.dropout = dropout
         
-        self.lr = lr
-        self.lr2 = lr2
-        self.lr_D = lr_D
-        self.n_rep = n_rep
+        self.n_record = n_record
         self.idx_gene = idx_gene
         self.n_patch = n_patch
         
@@ -44,14 +48,14 @@ class IEA(nn.Module):
         self.L = L
         self.d_out = len(self.idx_gene)
         
-        self.encoder = FullyConnectedNet(128, L * 2, hidden_channels = (96, 64, 48), bias = True, dropout = self.dropout)
+        self.encoder = FullyConnectedNet(128, L * 2, hidden_channels = (96, 64, 48), bias = True)
         self.linear = nn.Linear(self.L, self.d_out)
         
         
         self.optim = optim.Adam( self.encoder.parameters(), 
-            lr=self.lr, betas=(0.0,0.999), eps=1e-8)
+            lr=1e-4, betas=(0.0,0.999), eps=1e-8)
         self.optim2 = optim.Adam(   self.linear.parameters(),
-            lr=self.lr2, betas=(0.0,0.999), eps=1e-8)
+            lr=1e-2, betas=(0.0,0.999), eps=1e-8)
         
         
         self.loader = loader
@@ -69,7 +73,7 @@ class IEA(nn.Module):
         
     def weights_init_uniform(self):
         """
-        Initialize the model with kaiming uniform
+        Initialize the model with Kaiming Initialization.
         """
         classname = self.__class__.__name__
         # for every Linear layer in a model..
@@ -79,7 +83,7 @@ class IEA(nn.Module):
 
     def PoG(self, mu_np, log_var_np): 
         """
-        Given the means and variances of Guasian distributions, return mean and variances of the product of the distributions. 
+        Given the means and logarithm of variances of Guasian distributions, the function returns the mean and variances of the product of these Gaussian distributions. 
         """
         var_np = torch.exp(log_var_np)
         var_n =  1. /  ( 1. / var_np) .sum(1) 
@@ -105,6 +109,12 @@ class IEA(nn.Module):
         return .5 * ( -1 - log_var + log_var.exp() + mu.pow(2)  )
     
     def forward(self, X_npd, n_patch = None, non_prb = False):
+        """
+        Given the CSLR features for each patch, the function returns four variables the predicted y_nm, mu_npl, log_var_npl, Z_nl. y_nm is the predicted gene expression levels. mu_npl and log_var_npl is the mean and logarithm of variance for the patch-level latent variables. Z_nl is a sample for the subject-level representations. 
+        X_npd is an NxPxD tensor, where N is the number of samples, P is the number of patches and D is the number dimensions for the features.
+        n_patch represents the number of randomly selected subset of patches that is used to in the computation.
+        non_prb is an indecator whether the reparameterization trick is used to sample the subject-level representation/
+        """
         n_sample = X_npd.shape[0]
         
         if n_patch is None:
@@ -173,7 +183,7 @@ class IEA(nn.Module):
         """
 
         self.train()
-        f = open(self.filename.replace("models/", "logs/") + ".txt", "a", buffering=1)
+        f = open( self.filename + "_log.txt", "a", buffering=1 )
         
         for rep in range(n_repeat):
             self.step = 0
@@ -207,7 +217,6 @@ class IEA(nn.Module):
                     for iii in range(self.L):
                         for jjj in range(iii + 1, self.L):                    
                             HSIC = self.HSIC(rep_nl[:, [iii]], rep_nl[:, [jjj]])
-    #                         print(iii, jjj, HSIC)
                             HSIC_loss += HSIC
 
 
@@ -223,7 +232,7 @@ class IEA(nn.Module):
                     else:
                         gamma = self.gamma  * expit( ( self.step - ( n_init_step /2 ) ) / (n_init_step * 20 + 1e-5) )
 
-                    loss = MSE + self.alpha * MSE_ + gamma * HSIC_loss + self.beta * KLD
+                    loss = MSE + MSE_ + gamma * HSIC_loss + self.beta * KLD
 
 
 
@@ -241,7 +250,7 @@ class IEA(nn.Module):
                     Evaluating
                     """
 
-                    if self.step % self.n_rep == 0:
+                    if self.step % self.n_record == 0:
 
                         txt = "Step: {}\n".format(self.step)
                         txt += "MSE: {}\n".format( MSE.item() )
@@ -259,6 +268,7 @@ class IEA(nn.Module):
 
                         print(txt)
 
+                        # Saving the model only when the evaluated results are better than the current optimum.
                         if r2 > self.r2_opt and self.step > n_init_step:
                             self.r2_opt = r2.item()
                             torch.save( self.state_dict(), self.filename )
@@ -277,7 +287,7 @@ class IEA(nn.Module):
 
     def eval_model(self):
         """
-        Model evaluation. Return the r2 with the test set.
+        Model evaluation with the provided evaluation loader. Return the r2 in the evaluation set.
         """
         
         self.eval()

@@ -4,21 +4,17 @@ from torch.utils.data import Dataset
 import pickle
 import torch
 from sklearn.decomposition import PCA
+import os
+
+
 
 def load_data():
-#     filename = "/ocean/projects/asc170022p/juc91/rep2/COPD_data/COPDGene_P1P2P3_Flat_SM_NS_Mar20.txt"
-#     df = pd.read_csv(filename, sep = "\t", low_memory=False)
-    filename = "/ocean/projects/asc170022p/juc91/rep2/COPD_data/COPDGene_P1P2P3_Flat_SM_NS_Mar20.txt"
-
-    res = np.loadtxt(filename, str, delimiter = "\t")
-    df = pd.DataFrame(res[1:], columns = res[0])        
-    return df
-
-
-def load_longitudinal():
+    """
+    Load the pandas dataframe that contains the cross-sectional and longitudinal data.
+    """
     
-    
-    covariances = ["Age_P2", "gender", "race", 
+    # List of the variables returned in the primary dataset.
+    covariances = ["Age_P1", "gender", "race", 
                    "FEV1pp_utah_P1", "FEV1_FVC_utah_P1", "BMI_P1", "smoking_status_P1",
                    "SGRQ_scoreTotal_P1","MMRCDyspneaScor_P1", 
                    "distwalked_P1", "ATS_PackYears_P1", "Frequent_Exacerbator_P1",  
@@ -27,7 +23,7 @@ def load_longitudinal():
                    "finalGold_P1",
                    "delta_FEV1pp_P1P2", "delta_FEV1FVC_P1P2", "delta_pctEmph_P1P2", "delta_perc15_P1P2",
                    "delta_pctGasTrap_P1P2", "delta_Pi10_P1P2", "delta_WApct_P1P2",
-
+                   "Age_P2",
                    "FEV1pp_utah_P2", "FEV1_FVC_utah_P2", "BMI_P2", "smoking_status_P2",
                    "SGRQ_scoreTotal_P2","MMRCDyspneaScor_P2", 
                    "distwalked_P2", "ATS_PackYears_P2", "Frequent_Exacerbator_P2" ,  
@@ -39,10 +35,16 @@ def load_longitudinal():
                    
                ] 
     
-
+    # List of the subtypes returned in the subtype dataset.
     subtypes_used = ["PCA_emphysema_axis", "PCA_airway_axis", "KM_v2"]    
+
+    filename = "/ocean/projects/asc170022p/shared/Data/COPDGene/ClinicalData/P1-P2-P3_10k/COPDGene_P1P2P3_Flat_SM_NS_Mar20.txt"
+
+    res = np.loadtxt(filename, str, delimiter = "\t")
+    df = pd.DataFrame(res[1:], columns = res[0]).set_index("sid")
     
-    df = load_data().set_index("sid")
+    
+    #Computing the longitudinal change variables
     
     FEV1pp_P1 = df["FEV1pp_utah_P1"]
     FEV1pp_P1[ FEV1pp_P1 == "" ] = "nan"
@@ -164,12 +166,14 @@ def load_longitudinal():
     df_cov[df_cov == ""] = "nan"
     df_cov = df_cov.astype(float)
 
-    df_survival = pd.read_csv("/jet/home/juc91/prjc/prjc_root/shared/Data/COPDGene/ClinicalData/MortalitySurvivalAnalysis/COPDGene_VitalStatus_SM_NS_Aug20_update11_24_2020.csv")\
+    
+    #Loading survival dataset
+    df_survival = pd.read_csv("/ocean/projects/asc170022p/shared/Data/COPDGene/ClinicalData/MortalitySurvivalAnalysis/COPDGene_VitalStatus_SM_NS_Aug20_update11_24_2020.csv")\
         .set_index("sid")[['vital_status', 'days_followed']]
     
     df_merged = pd.merge(df_cov, df_survival,left_index=True,right_index=True, how = "outer")
 
-
+    #Computing 5-year mortality
     df_merged["5-year Mortality_P1"] = 1 - np.array(  df_merged["days_followed"] > 365 * 5, float )
     df_merged.loc[ 
         np.bitwise_and( df_merged["days_followed"] <= 365 * 5, df_merged["vital_status"] == 0 ), "5-year Mortality_P1"] = np.nan
@@ -199,14 +203,16 @@ def load_longitudinal():
     df_merged.loc[np.isnan(df_merged["days_followed"]), "5-year Mortality_P2" ] = np.nan
     df_merged.loc[np.isnan(N_days_P1P2), "5-year Mortality_P2"] = np.nan
     
+    # Loading the subtype dataset.
+    df_subtype = pd.read_csv("/ocean/projects/asc170022p/shared/Data/COPDGene/ClinicalData/Subtyping/COPDGene_Subtype_Smoker.csv").set_index("sid")
     
-    df_subtype = pd.read_csv("/jet/home/juc91/prjc/prjc_root/shared/SSL-features/COPDGene_Subtype_Smoker.csv").set_index("sid")
     df_subtype = df_subtype[subtypes_used]
     
     df_merged = pd.merge(df_merged, df_subtype,left_index=True,right_index=True, how = "outer")
-
-    Z_C = pd.read_csv("/ocean/projects/asc170022p/shared/SSL-features/r5+.csv")
-    Z_P = pd.read_csv("/ocean/projects/asc170022p/shared/SSL-features/r0_5.csv")
+    
+    # Computing the peel/core ratio of perc15.
+    Z_C = pd.read_csv("/ocean/projects/asc170022p/shared/IEA_data/perc15_by_bands/r5+.csv")
+    Z_P = pd.read_csv("/ocean/projects/asc170022p/shared/IEA_data/perc15_by_bands/r0_5.csv")
 
     Z_C = Z_C.set_index("Unnamed: 0").rename(columns = {"perc15":"perc15 core"})
     Z_P = Z_P.set_index("Unnamed: 0").rename(columns = {"perc15":"perc15 peel"})
@@ -224,10 +230,35 @@ def load_longitudinal():
     
     return df_merged
     
+def load_perc15_bands():   
+    """
+    Load the data of perc15 by different bands.
+    """
+    data_dir = "/ocean/projects/asc170022p/juc91/prjc_root/shared/IEA_data/perc15_by_bands/"
+    file_list = os.listdir(data_dir)
     
+    df = None
+
+    for fff in file_list:
+
+        feature_name = fff.replace(".csv", "")
+
+        data = pd.read_csv(data_dir + fff).set_index("Unnamed: 0")
+        df_fff = data.rename(columns = {"perc15": feature_name + "_perc15", "pctemph": feature_name + "_pctemph"})
+        
+        if df is None:
+            df = df_fff
+        else:
+            df = pd.merge(df, df_fff, left_index = True, right_index = True)
+            
+    return df
 
 
 def load_gene_data():
+    
+    """
+    Load the gene expression dataset.
+    """
     
     raw_data = np.loadtxt("/ocean/projects/asc170022p/shared/Data/COPDGene/GeneticGenomicData/RNAseq_freeze3/gene_counts_TMM_LC.tsv", 
                           dtype = str, delimiter = "\t")
@@ -248,7 +279,12 @@ def load_gene_data():
 
 def load_SSL_features_P1():
     
-    patch_rep_dir = "/ocean/projects/asc170022p/shared/SSL-features/SSL_features_P1.pickle"
+    """
+    Load the self-supervised features for phase 1.
+    """
+    
+    
+    patch_rep_dir = "/ocean/projects/asc170022p/shared/IEA_data/SSL_features_P1.pickle"
     with open(patch_rep_dir, 'rb') as fp:
         patch_rep_dict = pickle.load(fp)
         
@@ -263,8 +299,12 @@ def load_SSL_features_P1():
     return sid_used, patch_rep
     
 def load_SSL_features_P2():
+    """
+    Load the self-supervised features for phase 2.
+    """
     
-    patch_rep_dir = "/ocean/projects/asc170022p/shared/SSL-features/SSL_features_P2.pickle"
+    
+    patch_rep_dir = "/ocean/projects/asc170022p/shared/IEA_data/SSL_features_P2.pickle"
     with open(patch_rep_dir, 'rb') as fp:
         patch_rep_dict = pickle.load(fp)
         
@@ -279,6 +319,11 @@ def load_SSL_features_P2():
     return sid_used, patch_rep    
 
 def load_SSL_PCs( n_components = 10 ):
+    """
+    Return the PCs for the self-supervised features.
+    """
+    
+    
     M = PCA(n_components = n_components)
     sid_P2, SSL_P2 = load_SSL_features_P2()
     sid_P1, SSL_P1 = load_SSL_features_P1()
@@ -304,6 +349,9 @@ def load_SSL_PCs( n_components = 10 ):
     
     
 class image_gene_dataset(Dataset):
+    """
+    The data loader for image-gene data.
+    """
     def __init__(self, train = True, cv = None, n_cv = 5, seed = 0, N_test = 300):
     
         np.random.seed(seed)

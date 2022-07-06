@@ -2,41 +2,77 @@ import sys
 import torch
 import numpy as np
 import pandas as pd
-
-
 from torch.utils.data import DataLoader
 import utility
 import IEA_model
+import os
 
 
-L = int(sys.argv[1])
-thold = float(sys.argv[2])
+import argparse
 
-gamma = float(sys.argv[3])
-beta = float(sys.argv[4])
 
-for cv in range(5):
 
-    df = pd.read_csv("gene_list_PCA/THOLD_{}.txt".format(thold))
-    idx_gene = df["index"].to_numpy()
+parser = argparse.ArgumentParser(description='Train the IEA model with cross-validation. The model after training will be save in files')
 
-    # idx_gene = np.load("../image_gene/ICA_no_correction/gene_idx_CV_major0.001.npy")
+parser.add_argument('--L', type=int, default=2, help='Number of axes')
+parser.add_argument('--thold', type=float, default=5e-3, help='The real-valued thresholds of the adjusted p-values for gene selection')
+parser.add_argument('--gamma', type=float, default=1.0, help='The real-valued hyper-parameter gamma that controls the weight of the HSIC penalty in the objective function')
+parser.add_argument('--beta', type=float, default=.1, help='The real-valued hyper-parameter beta that controls the weight of the KL divergence in the objective function')
+parser.add_argument('--seed', type=int, default=0, help='The seed for the random number generator.')
+parser.add_argument('--n_patch', type=int, default=32, help='The number of randomly selected patches for each subject used during the training.')
+parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training.')
+parser.add_argument('--n_record', type=int, default=10, help='The number of epochs for logging')
+parser.add_argument('--genelist', type=str, default="../gene_list/THOLD_0.005.txt", help='The filename for the gene list that is used for training.')
+parser.add_argument('--filelist', type=str, default=None, help='A text file that gives the filename list of for the saved models. The number of files in the list corresponds to the number of cross validations. If this is not provided, a default list is used.' )
 
-    data_train = utility.image_gene_dataset(train = True, cv = cv, n_cv = 5)
-    data_validate = utility.image_gene_dataset(train = False, cv = cv, n_cv = 5)
 
-    train_loader = DataLoader(data_train, batch_size = 32)
+
+args = parser.parse_args()
+
+
+L = args.L
+thold = args.thold
+
+beta = args.beta
+gamma = args.gamma
+seed = args.seed
+n_patch = args.n_patch
+n_record = args.n_record
+batch_size = args.batch_size
+
+
+df = args.genelist
+idx_gene = df["index"].to_numpy()
+
+if not os.path.exists("../models/"):
+    os.makedirs("../models/")
+
+
+if args.filelist is None:
+    filelist = ["../models/model_L{}_cv{}_beta{}_gamma{}_genes{}".format(
+               L, cv, beta, gamma, len(idx_gene)) for cv in range(5) ]    
+else:
+    with open(args.filelist) as f:
+        filelist = [line.rstrip() for line in f]
+        
+n_cv = len(filelist)
+
+
+for cv in range(n_cv):
+    data_train = utility.image_gene_dataset(train = True, cv = cv, n_cv = n_cv)
+    data_validate = utility.image_gene_dataset(train = False, cv = cv, n_cv = n_cv)
+
+    train_loader = DataLoader(data_train, batch_size = args.batch_size)
     validate_loader = DataLoader(data_validate, batch_size = 500)
 
 
-    filename = "models/model_L{}_cv{}_beta{}_gamma{}_genes{}".format(
-               L, cv, beta, gamma, len(idx_gene))
+    filename = filelist[cv]
 
     M = IEA_model.IEA(train_loader, validate_loader, 
-                      idx_gene = idx_gene, gamma = gamma, beta = beta, L = L, 
-                      n_patch = 32, n_rep = 10, filename = filename).cuda()
+                      idx_gene = idx_gene, gamma = gamma, beta = beta, L = L, seed = seed, 
+                      n_patch = n_patch, n_record = n_record, filename = filename).cuda()
 
-
+    #train the model.
     M.train_model(8000, 5000, 1)
 
 
