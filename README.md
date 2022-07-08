@@ -10,29 +10,24 @@ We identified two distinct IEAs that capture most of the relationship between CT
   <img width="75%" height="%75" src="https://github.com/batmanlab/IEA/blob/main/Figures_Tables/summary.png">
 </p>
 
+The data analysis can be separated into the following 4 parts: 1) Register and patchify the CT scans; 2) Extact the features from the processed CT scans; 3) Select genes based on the association between gene expression and extracted image features; 4) Train the deep learning model that identify IEA using the image features and the expression levels of the selected genes. We provide the code for step 3 and 4 in this repository.
 
-
-
-To reproduce the results follow the following steps:
+# Generate the IEAs
+The IEAs can be generated with the following steps:
 ### Clone the repository
 ```
 git clone https://github.com/batmanlab/IEA.git
 cd IEA
 ```
-
-
 ### Install the required packages
 ```
 conda env create -f environment.yml -n IEA
 conda activate IEA
 ```
-
-
-### Gene selection
+### Gene selection 
 ```
 python ./src/gene_selection.py
 ```
-
 ### Training the model with Cross validation 
 ```
 python ./src/train_IEA.py
@@ -43,9 +38,15 @@ python ./src/train_IEA.py
 python ./src/summarize_cv.py
 ```
 
-
-
-
+# Additional model training with different hyper-parameters
+To generate the supplemental Tables E1 and E2, we need to variate the thresholds of the adjusted p-values for gene selection and train the IEA models. To train these models, run the following script:
+```
+./src/gene_thresholds.sh 
+```
+To generate the supplemental Figure E2, we need to variate the number of IEAs when training the IEA models. To train these models, run the following script:
+```
+./src/num_IEAS.sh 
+```
 
 
 
