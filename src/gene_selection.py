@@ -24,8 +24,6 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Selecting genes with the image features. The selected genes are saved in the output files.')
 parser.add_argument('--output_dir', type=str, default="./gene_list/", help='The selected genes are saved in the output directory.')
-parser.add_argument('--models', type=str, default=None, help='A text file that gives the filename list of for the saved models in the cross validation. If this is not provided, a default list is used.')
-
 
 args = parser.parse_args()
 
@@ -34,16 +32,6 @@ args = parser.parse_args()
 if not os.path.exists(args.output_dir):
     os.makedirs(args.output_dir)
     
-if args.models is None:
-    L = 2
-    beta = .1
-    gamma = 1.0
-    
-    filelist = ["../models/model_L{}_cv{}_beta{}_gamma{}_genes{}".format(
-               L, cv, beta, gamma, len(idx_gene)) for cv in range(5) ]    
-else:
-    with open(args.models) as f:
-        filelist = [line.rstrip() for line in f]    
 
 #Load the data
 image_gene_dataset = utility.image_gene_dataset(train = True, cv = None,)
