@@ -38,7 +38,7 @@ python ./src/train_IEA.py
 python ./src/summarize_cv.py
 ```
 
-# Additional model training with different hyper-parameters
+# Additional model training 
 To generate the supplemental Tables E1 and E2, we need to variate the thresholds of the adjusted p-values for gene selection and train the IEA models. To train these models, run the following script:
 ```
 ./src/gene_thresholds.sh 
