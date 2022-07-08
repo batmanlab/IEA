@@ -16,41 +16,31 @@ We identified two distinct IEAs that capture most of the relationship between CT
 To reproduce the results follow the following steps:
 ## Clone the repository
 '''
-{
 git clone https://github.com/batmanlab/IEA.git
 cd IEA
-}
 '''
 
 
 ## Install the required packages
-'''
-{
+```
 conda env create -f environment.yml -n IEA
 conda activate IEA
-}
-'''
+```
 
 
 ## Gene selection
 '''
-{
 python ./src/gene_selection.py
-}
 '''
 
 ## Training the model with Cross validation 
 '''
-{
 python ./src/train_IEA.py
-}
 '''
 
 ## Summarizing the cross-validation results
 '''
-{
 python ./src/summarize_cv.py
-}
 '''
 
 
@@ -73,22 +63,20 @@ Table 5 Characteristics of subgroups defined by diving the Image-Expression Axes
 
 Table 6 Correlation Coefficient among Image-expression Axes (IEAs), factor analysis axes (FAs)and PCA image only axes (PCA-I).
 
-Table E1. Pearson’s Correlation coefficients for IEAs in 5-fold cross-validation (CV).	5
-Table E2 Pearson’s correlation coefficients between IEAs identified using different adjusted p-value thresholds for inclusion of genes in the IEA model.	6
+Table E1. Pearson’s Correlation coefficients for IEAs in 5-fold cross-validation (CV).
+Table E2 Pearson’s correlation coefficients between IEAs identified using different adjusted p-value thresholds for inclusion of genes in the IEA model.
 Table E3 The correlation between perc15 ratio and IEAs.	7
-Table E4 Multivariate analysis with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.	8
-Table E5 Logistic regression and Cox model with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.	9
-Table E6 Univariate analysis with image-expression axes (IEAs), phenotype disease axes and image-based features with COPDGene visit 1 data.	10
-Table E7 Linear regression analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.	11
-Table E8 Multivariate analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.	12
-Table E9 Linear regression analysis with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.	13
-Table E10 Logistic regression and Cox model with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.	14
-Table E11 Differentially Expressed Genes (DEGs) associated with the IEAemph.	15
-Table E12 Differentially Expressed Genes (DEGs) associated with the IEAairway.	16
+Table E4 Multivariate analysis with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.
+Table E5 Logistic regression and Cox model with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.
+Table E6 Univariate analysis with image-expression axes (IEAs), phenotype disease axes and image-based features with COPDGene visit 1 data.
+Table E7 Linear regression analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.
+Table E8 Multivariate analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.
+Table E9 Linear regression analysis with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.
+Table E10 Logistic regression and Cox model with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.
 
-Figure E1 Consort Diagram showing the subjects used in the analysis .	17
-Figure E2 Mean R2 vs. number of IEAs. The figure shows that when the number of IEAs is greater than two, the mean R2 does not increase much. We choose the number of IEAs to be two.	18
-Figure E3. Lung “bands” used in peel-core sensitivity analysis. To determine the robustness of the IEA association to peel-core emphysema, the Qperc15peel-core variable was recomputed using a series of lung bands defined based on distance to the lung boundary.	19
-Figure E4, Histograms of the variance explained by the IEAs and PCA-I. The figure on the left shows the histogram for the 859 selected genes.  The figure on the right shows the histogram for all the genes.	20
+Figure E1 Consort Diagram showing the subjects used in the analysis .
+Figure E2 Mean R2 vs. number of IEAs. The figure shows that when the number of IEAs is greater than two, the mean R2 does not increase much. We choose the number of IEAs to be two.
+Figure E3. Lung “bands” used in peel-core sensitivity analysis. To determine the robustness of the IEA association to peel-core emphysema, the Qperc15peel-core variable was recomputed using a series of lung bands defined based on distance to the lung boundary.
+Figure E4, Histograms of the variance explained by the IEAs and PCA-I. The figure on the left shows the histogram for the 859 selected genes.  The figure on the right shows the histogram for all the genes.
 
 
