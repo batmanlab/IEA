@@ -39,15 +39,15 @@ python ./src/summarize_cv.py
 ```
 
 # Additional model training 
-To generate the supplemental Tables E1 and E2, we need to variate the thresholds of the adjusted p-values for gene selection and train the IEA models. To train these models, run the following script:
+To generate the supplemental Tables E1 and E2, it is required to variate the thresholds of the adjusted p-values for gene selection and train the IEA models with different sets of selected genes. To train these models, run the following script:
 ```
 ./src/gene_thresholds.sh 
 ```
-To generate the supplemental Figure E2, we need to variate the number of IEAs when training the IEA models. To train these models, run the following script:
+To generate the supplemental Figure E2, it is required to variate the number of IEAs when training the IEA models. To train these models, run the following script:
 ```
-./src/num_IEAS.sh 
+./src/num_IEAs.sh 
 ```
-
+These two scripts might take long to run, and it is recommended to parallelize these scripts.
 
 
 # Tables and Figures
