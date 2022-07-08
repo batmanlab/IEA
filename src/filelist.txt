@@ -1,0 +1,5 @@
+../models/model_L2_cv0_beta0.1_gamma1.0_genes1081
+../models/model_L2_cv1_beta0.1_gamma1.0_genes1081
+../models/model_L2_cv2_beta0.1_gamma1.0_genes1081
+../models/model_L2_cv3_beta0.1_gamma1.0_genes1081
+../models/model_L2_cv4_beta0.1_gamma1.0_genes1081
