@@ -7,51 +7,41 @@ We identified two distinct IEAs that capture most of the relationship between CT
 # Data Analysis
 
 <p align="center">
-  <img width="75%" height="%75" src="https://github.com/batmanlab/IEA/Figures_Tables/summary.png">
+  <img width="75%" height="%75" src="https://github.com/batmanlab/IEA/blob/main/Figures_Tables/summary.png">
 </p>
 
 
 
 
 To reproduce the results follow the following steps:
-## Clone the repository
-'''
-{
+### Clone the repository
+```
 git clone https://github.com/batmanlab/IEA.git
 cd IEA
-}
-'''
+```
 
 
-## Install the required packages
-'''
-{
+### Install the required packages
+```
 conda env create -f environment.yml -n IEA
 conda activate IEA
-}
-'''
+```
 
 
-## Gene selection
-'''
-{
+### Gene selection
+```
 python ./src/gene_selection.py
-}
-'''
+```
 
-## Training the model with Cross validation 
-'''
-{
+### Training the model with Cross validation 
+```
 python ./src/train_IEA.py
-}
-'''
+```
 
-## Summarizing the cross-validation results
-'''
-{
+### Summarizing the cross-validation results
+```
 python ./src/summarize_cv.py
-}
-'''
+```
 
 
 
@@ -61,34 +51,45 @@ python ./src/summarize_cv.py
 
 # Tables and Figures
 The primary results of the Tables and Figures can be regenerated with the folloing python notebooks:
-Table 1. Subject characteristics in training and test data. 
 
-Table 2. Pearson’s correlation between image-expression axes (IEAs) and COPD-related characteristics and health outcomes. 
+[Table 1]('./Figures_Tables/main_text/Table1.ipynb') Subject characteristics in training and test data. 
 
-Table 3 Multivariable associations of image-expression axes (IEAs) to continuous COPD-related characteristics and health outcomes. 
+[Table 2]('./Figures_Tables/main_text/Table2.ipynb') Pearson’s correlation between image-expression axes (IEAs) and COPD-related characteristics and health outcomes. 
 
-Table 4. Multivariable associations of image-expression axes (IEAs) to Frequent Exacerbations and Mortality. 
+[Table 3]('./Figures_Tables/main_text/Table3.ipynb') Multivariable associations of image-expression axes (IEAs) to continuous COPD-related characteristics and health outcomes. 
 
-Table 5 Characteristics of subgroups defined by diving the Image-Expression Axes (IEAs) into quadrants.
+[Table 4]('./Figures_Tables/main_text/Table4.ipynb') Multivariable associations of image-expression axes (IEAs) to Frequent Exacerbations and Mortality. 
 
-Table 6 Correlation Coefficient among Image-expression Axes (IEAs), factor analysis axes (FAs)and PCA image only axes (PCA-I).
+[Table 5]('./Figures_Tables/main_text/Table5.ipynb') Characteristics of subgroups defined by diving the Image-Expression Axes (IEAs) into quadrants.
 
-Table E1. Pearson’s Correlation coefficients for IEAs in 5-fold cross-validation (CV).	5
-Table E2 Pearson’s correlation coefficients between IEAs identified using different adjusted p-value thresholds for inclusion of genes in the IEA model.	6
-Table E3 The correlation between perc15 ratio and IEAs.	7
-Table E4 Multivariate analysis with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.	8
-Table E5 Logistic regression and Cox model with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.	9
-Table E6 Univariate analysis with image-expression axes (IEAs), phenotype disease axes and image-based features with COPDGene visit 1 data.	10
-Table E7 Linear regression analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.	11
-Table E8 Multivariate analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.	12
-Table E9 Linear regression analysis with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.	13
-Table E10 Logistic regression and Cox model with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.	14
-Table E11 Differentially Expressed Genes (DEGs) associated with the IEAemph.	15
-Table E12 Differentially Expressed Genes (DEGs) associated with the IEAairway.	16
+[Table 6]('./Figures_Tables/main_text/Table6.ipynb') Correlation Coefficient among Image-expression Axes (IEAs), factor analysis axes (FAs)and PCA image only axes (PCA-I).
 
-Figure E1 Consort Diagram showing the subjects used in the analysis .	17
-Figure E2 Mean R2 vs. number of IEAs. The figure shows that when the number of IEAs is greater than two, the mean R2 does not increase much. We choose the number of IEAs to be two.	18
-Figure E3. Lung “bands” used in peel-core sensitivity analysis. To determine the robustness of the IEA association to peel-core emphysema, the Qperc15peel-core variable was recomputed using a series of lung bands defined based on distance to the lung boundary.	19
-Figure E4, Histograms of the variance explained by the IEAs and PCA-I. The figure on the left shows the histogram for the 859 selected genes.  The figure on the right shows the histogram for all the genes.	20
+[Figure 4]('./Figures_Tables/main_text/Figure4.ipynb')
+
+[Table E1]('./Figures_Tables/Supplementary/TableE1.ipynb'). Pearson’s Correlation coefficients for IEAs in 5-fold cross-validation (CV).
+
+[Table E2]('./Figures_Tables/Supplementary/TableE2.ipynb') Pearson’s correlation coefficients between IEAs identified using different adjusted p-value thresholds for inclusion of genes in the IEA model.
+
+[Table E3]('./Figures_Tables/Supplementary/TableE3.ipynb') The correlation between perc15 ratio and IEAs.
+
+[Table E4]('./Figures_Tables/Supplementary/TableE4.ipynb') Multivariate analysis with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.
+
+[Table E5]('./Figures_Tables/Supplementary/TableE5.ipynb') Logistic regression and Cox model with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data.
+
+[Table E6]('./Figures_Tables/Supplementary/TableE6.ipynb') Univariate analysis with image-expression axes (IEAs), phenotype disease axes and image-based features with COPDGene visit 1 data.
+
+[Table E7]('./Figures_Tables/Supplementary/TableE7.ipynb') Linear regression analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.
+
+[Table E8]('./Figures_Tables/Supplementary/TableE8.ipynb') Multivariate analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.
+
+[Table E9]('./Figures_Tables/Supplementary/TableE9.ipynb')  Linear regression analysis with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.
+
+[Table E9]('./Figures_Tables/Supplementary/TableE10.ipynb') Logistic regression and Cox model with image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) on COPDGene visit 1 data.
+
+[Figure E2]('./Figures_Tables/Supplementary/FigureE2.ipynb') Mean R2 vs. number of IEAs. 
+
+[Figure E4]('./Figures_Tables/Supplementary/FigureE4.ipynb') Histograms of the variance explained by the IEAs and PCA-I. 
+
+
 
 
