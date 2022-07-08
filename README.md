@@ -14,34 +14,34 @@ We identified two distinct IEAs that capture most of the relationship between CT
 
 
 To reproduce the results follow the following steps:
-## Clone the repository
-'''
+### Clone the repository
+```
 git clone https://github.com/batmanlab/IEA.git
 cd IEA
-'''
+```
 
 
-## Install the required packages
+### Install the required packages
 ```
 conda env create -f environment.yml -n IEA
 conda activate IEA
 ```
 
 
-## Gene selection
-'''
+### Gene selection
+```
 python ./src/gene_selection.py
-'''
+```
 
-## Training the model with Cross validation 
-'''
+### Training the model with Cross validation 
+```
 python ./src/train_IEA.py
-'''
+```
 
-## Summarizing the cross-validation results
-'''
+### Summarizing the cross-validation results
+```
 python ./src/summarize_cv.py
-'''
+```
 
 
 
