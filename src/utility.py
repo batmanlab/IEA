@@ -211,7 +211,7 @@ def load_data():
     df_merged = pd.merge(df_merged, df_subtype,left_index=True,right_index=True, how = "outer")
     
     # Computing the peel/core ratio of perc15.
-    Z_C = pd.read_csv("/ocean/projects/asc170022p/shared/IEA_data/perc15_by_bands/r5+.csv")
+    Z_C = pd.read_csv("/ocean/projects/asc170022p/shared/IEA_data/perc15_by_bands/r20+.csv")
     Z_P = pd.read_csv("/ocean/projects/asc170022p/shared/IEA_data/perc15_by_bands/r0_5.csv")
 
     Z_C = Z_C.set_index("Unnamed: 0").rename(columns = {"perc15":"perc15 core"})
@@ -220,7 +220,7 @@ def load_data():
 
 
     df_prec15_ratio = pd.merge(Z_C, Z_P, left_index = True, right_index = True,)
-    df_prec15_ratio["perc15_ratio"] = 100 * np.emath.log(df_prec15_ratio["perc15 core"] / df_prec15_ratio["perc15 peel"])
+    df_prec15_ratio["perc15_ratio"] = 100 * np.emath.log(df_prec15_ratio["perc15 peel"] / df_prec15_ratio["perc15 core"] )
 
 
 
@@ -234,7 +234,7 @@ def load_perc15_bands():
     """
     Load the data of perc15 by different bands.
     """
-    data_dir = "/ocean/projects/asc170022p/juc91/prjc_root/shared/IEA_data/perc15_by_bands/"
+    data_dir = "/ocean/projects/asc170022p/shared/IEA_data/perc15_by_bands/"
     file_list = os.listdir(data_dir)
     
     df = None

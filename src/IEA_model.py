@@ -41,26 +41,27 @@ class IEA(nn.Module):
         self.n_record = n_record
         self.idx_gene = idx_gene
         self.n_patch = n_patch
+        self.L = L
+        self.d_out = len(self.idx_gene)
         
         np.random.seed(seed)
         torch.manual_seed(seed)
         
-        self.L = L
-        self.d_out = len(self.idx_gene)
-        
+        #The MLP encoder model and the linear layer.
         self.encoder = FullyConnectedNet(128, L * 2, hidden_channels = (96, 64, 48), bias = True)
         self.linear = nn.Linear(self.L, self.d_out)
         
-        
+        # Different learning rates are applied for the encoder and the linear layer
         self.optim = optim.Adam( self.encoder.parameters(), 
             lr=1e-4, betas=(0.0,0.999), eps=1e-8)
         self.optim2 = optim.Adam(   self.linear.parameters(),
             lr=1e-2, betas=(0.0,0.999), eps=1e-8)
         
-        
+        # The loader for the training and evaluation dataset
         self.loader = loader
         self.eval_loader = eval_loader
         
+        # The filename for saving the trained model
         if filename is None:
             self.filename = \
                     "models/model_L{}_beta{}_gamma{}_genes{}".format(
@@ -68,7 +69,7 @@ class IEA(nn.Module):
         else:
             self.filename = filename
         
-
+        # Initialize the optimal r2 with negative values.
         self.r2_opt = -1e30
         
     def weights_init_uniform(self):
@@ -179,7 +180,10 @@ class IEA(nn.Module):
         
     def train_model(self, n_step = 10000, n_init_step = 1, n_repeat = 1):
         """
-        Model training. n_step is the number of steps of training. n_init_step is the number of steps for initialization. n_repeat is the number of re-initialization for the training.
+        Model training. 
+        n_step is the number of steps of training. 
+        n_init_step is the number of steps for initialization. 
+        n_repeat is the number of re-initialization for the training.
         """
 
         self.train()
@@ -207,12 +211,17 @@ class IEA(nn.Module):
                     X_npd = rep.cuda().view(-1, 581, 128)
                     y_nm = gene.cuda()[:, self.idx_gene]
                     batch_size = X_npd.shape[0]
-
+                    
+                    
+                    # Obtaining the prediction with abd without reparameterization trick.
                     y_pred_nm, mu_npl, log_var_npl, _ = self.forward(X_npd, n_patch = self.n_patch)
                     y_pred_nm_, _, _, rep_nl = self.forward(X_npd, non_prb = True, n_patch = self.n_patch)
-
+                    
+                    
+                    # Computing the KL divervence for the patch-level representations
                     KLD = self.KL_Divergence(mu_npl, log_var_npl).mean()
 
+                    # Computing HSIC loss
                     HSIC_loss = torch.tensor(0.).cuda()
                     for iii in range(self.L):
                         for jjj in range(iii + 1, self.L):                    
@@ -222,14 +231,18 @@ class IEA(nn.Module):
 
 
 
-
-                    MSE = ( (y_nm - y_pred_nm ) ** 2 ).mean()
+                    # Computing the mean squared errors of the prediction with abd without reparameterization trick.
+                    # In the test, the results without reparameterization trick is used, to reduce the unnecessary randomness.
+                    # However, the erparameterization trick is helpful in the training to obtain good model.
+                    MSE = ( (y_nm - y_pred_nm ) ** 2 ).mean()  
                     MSE_ = ( (y_nm - y_pred_nm_ ) ** 2 ).mean()
 
 
                     if self.step > n_init_step:
                         gamma = self.gamma
                     else:
+                        # In the initialization steps, the HSIC penalty is slowly increased. 
+                        # If the gamma value is fixed to a large value at the beginning, the model converges more slowly.
                         gamma = self.gamma  * expit( ( self.step - ( n_init_step /2 ) ) / (n_init_step * 20 + 1e-5) )
 
                     loss = MSE + MSE_ + gamma * HSIC_loss + self.beta * KLD
@@ -238,12 +251,9 @@ class IEA(nn.Module):
 
                     loss.backward()
                     torch.nn.utils.clip_grad_norm_(self.parameters(), 1e-3)
-
-                    self.step += 1
-
-
                     self.optim.step()
                     self.optim2.step()
+                    self.step += 1
 
 
                     """
@@ -251,6 +261,7 @@ class IEA(nn.Module):
                     """
 
                     if self.step % self.n_record == 0:
+                        # Save some results in the log file and print them.
 
                         txt = "Step: {}\n".format(self.step)
                         txt += "MSE: {}\n".format( MSE.item() )
@@ -261,6 +272,7 @@ class IEA(nn.Module):
                         f.write(txt)
 
 
+                        # Evaludate the model with the validation dataset and return the r-squared.
                         r2 = self.eval_model()
 
                         txt = "R2:{}\n".format(r2.item())
@@ -287,7 +299,7 @@ class IEA(nn.Module):
 
     def eval_model(self):
         """
-        Model evaluation with the provided evaluation loader. Return the r2 in the evaluation set.
+        Model evaluation with the provided evaluation dataset. Return the r-squared score in the evaluation set.
         """
         
         self.eval()
