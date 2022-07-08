@@ -7,7 +7,7 @@ We identified two distinct IEAs that capture most of the relationship between CT
 # Data Analysis
 
 <p align="center">
-  <img width="75%" height="%75" src="https://github.com/batmanlab/IEA/Figures_Tables/summary.png">
+  <img width="75%" height="%75" src="https://github.com/batmanlab/IEA/blob/main/Figures_Tables/summary.png">
 </p>
 
 
