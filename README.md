@@ -28,9 +28,15 @@ conda activate IEA
 ```
 python ./src/gene_selection.py
 ```
-### Training the model with Cross validation 
+### Model training 
 ```
 python ./src/train_IEA.py
+```
+
+The user can skip model training and download the pre-train models, by running the following code:
+```
+curl -L "https://docs.google.com/uc?export=download&id=1qeMC8y2jRU7iI0raWoT1YJZktNqT0S-y" --output primary_models.zip
+unzip primary_models.zip
 ```
 
 ### Summarizing the cross-validation results
@@ -50,6 +56,13 @@ chmod +x ./src/num_IEAs.sh
 ./src/num_IEAs.sh 
 ```
 These two scripts might take long to run, and it is recommended to parallelize these scripts.
+
+The user can skip model training and download the pre-trained models with the following code:
+```
+curl -L "https://docs.google.com/uc?export=download&id=10-JQ3R4hJmC1nXhzucedr2hMAFkOHoHn" --output models.zip
+unzip models.zip
+```
+
 
 
 # Tables and Figures
