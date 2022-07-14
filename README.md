@@ -28,9 +28,15 @@ conda activate IEA
 ```
 python ./src/gene_selection.py
 ```
-### Training the model with Cross validation 
+### Model training 
 ```
 python ./src/train_IEA.py
+```
+
+The user can skip model training and download the pre-train models, by running the following code:
+```
+curl -L "https://docs.google.com/uc?export=download&id=1qeMC8y2jRU7iI0raWoT1YJZktNqT0S-y" --output primary_models.zip
+unzip -o primary_models.zip
 ```
 
 ### Summarizing the cross-validation results
@@ -51,6 +57,13 @@ chmod +x ./src/num_IEAs.sh
 ```
 These two scripts might take long to run, and it is recommended to parallelize these scripts.
 
+The user can skip model training and download the pre-trained models with the following code:
+```
+curl -L "https://docs.google.com/uc?export=download&id=10-JQ3R4hJmC1nXhzucedr2hMAFkOHoHn" --output models.zip
+unzip -o models.zip
+```
+
+
 
 # Tables and Figures
 The primary results of the Tables and Figures can be regenerated with the folloing python notebooks:
@@ -67,7 +80,7 @@ The primary results of the Tables and Figures can be regenerated with the folloi
 
 [Table 6](./Figures_Tables/main_text/Table6.ipynb) Correlation Coefficient among Image-expression Axes (IEAs), factor analysis axes (FAs)and PCA image only axes (PCA-I).
 
-[Figure 4](./Figures_Tables/main_text/Figure4.ipynb) Distribution of IEA<sub>emph<\sub> and IEA<sub>airway<\sub> values grouped by previously published COPD K-means clustering subtypes.
+[Figure 4](./Figures_Tables/main_text/Figure4.ipynb) Distribution of IEA<sub>emph</sub> and IEA<sub>airway</sub> values grouped by previously published COPD K-means clustering subtypes.
 
 [Table E1](./Figures_Tables/Supplementary/TableE1.ipynb) Pearson correlation coefficients for IEAs in 5-fold cross-validation (CV).
 
