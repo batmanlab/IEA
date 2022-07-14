@@ -36,7 +36,7 @@ python ./src/train_IEA.py
 The user can skip model training and download the pre-train models, by running the following code:
 ```
 curl -L "https://docs.google.com/uc?export=download&id=1qeMC8y2jRU7iI0raWoT1YJZktNqT0S-y" --output primary_models.zip
-unzip primary_models.zip
+unzip -o primary_models.zip
 ```
 
 ### Summarizing the cross-validation results
@@ -60,7 +60,7 @@ These two scripts might take long to run, and it is recommended to parallelize t
 The user can skip model training and download the pre-trained models with the following code:
 ```
 curl -L "https://docs.google.com/uc?export=download&id=10-JQ3R4hJmC1nXhzucedr2hMAFkOHoHn" --output models.zip
-unzip models.zip
+unzip -o models.zip
 ```
 
 
