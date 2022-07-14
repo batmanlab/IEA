@@ -80,7 +80,7 @@ The primary results of the Tables and Figures can be regenerated with the folloi
 
 [Table 6](./Figures_Tables/main_text/Table6.ipynb) Correlation Coefficient among Image-expression Axes (IEAs), factor analysis axes (FAs)and PCA image only axes (PCA-I).
 
-[Figure 4](./Figures_Tables/main_text/Figure4.ipynb) Distribution of IEA<sub>emph<\sub> and IEA<sub>airway<\sub> values grouped by previously published COPD K-means clustering subtypes.
+[Figure 4](./Figures_Tables/main_text/Figure4.ipynb) Distribution of IEA<sub>emph</sub> and IEA<sub>airway</sub> values grouped by previously published COPD K-means clustering subtypes.
 
 [Table E1](./Figures_Tables/Supplementary/TableE1.ipynb) Pearson correlation coefficients for IEAs in 5-fold cross-validation (CV).
 
