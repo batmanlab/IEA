@@ -76,11 +76,11 @@ The primary results of the Tables and Figures can be regenerated with the folloi
 
 [Table 4](./Figures_Tables/main_text/Table4.ipynb) Multivariable associations of image-expression axes (IEAs) to Frequent Exacerbations and Mortality. 
 
-[Table 5](./Figures_Tables/main_text/Table5.ipynb) Characteristics of subgroups defined by diving the Image-Expression Axes (IEAs) into quadrants.
-
-[Table 6](./Figures_Tables/main_text/Table6.ipynb) Correlation Coefficient among Image-expression Axes (IEAs), factor analysis axes (FAs)and PCA image only axes (PCA-I).
+[Figure 2](./Figures_Tables/main_text/Figure2.ipynb) Variance of gene expression explained by IEAs as we variate the number of IEAs.
 
 [Figure 4](./Figures_Tables/main_text/Figure4.ipynb) Distribution of IEA<sub>emph</sub> and IEA<sub>airway</sub> values grouped by previously published COPD K-means clustering subtypes.
+
+[Figure 5](./Figures_Tables/main_text/Figure5.ipynb) Histograms for the variance of gene expression explained by the IEAs and PCA-Is.
 
 [Table E1](./Figures_Tables/Supplementary/TableE1.ipynb) Pearson correlation coefficients for IEAs in 5-fold cross-validation (CV).
 
