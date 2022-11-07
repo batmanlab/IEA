@@ -82,31 +82,34 @@ The primary results of the Tables and Figures can be regenerated with the folloi
 
 [Figure 5](./Figures_Tables/main_text/Figure5.ipynb) Histograms for the variance of gene expression explained by the IEAs and PCA-Is.
 
-[Table E1](./Figures_Tables/Supplementary/TableE1.ipynb) Pearson correlation coefficients for IEAs in 5-fold cross-validation (CV).
 
-[Table E2](./Figures_Tables/Supplementary/TableE2.ipynb) Pearson correlation coefficients between IEAs identified using different adjusted p-value thresholds for inclusion of genes in the IEA model.
+[Table E1](./Figures_Tables/Supplementary/TableE1.ipynb) Cross-validation performance in IEA training. 
 
-[Table E3](./Figures_Tables/Supplementary/TableE3.ipynb) The correlation between perc15 ratio and IEAs.
+[Table E2](./Figures_Tables/Supplementary/TableE2.ipynb) Linear Regression with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data. 
 
-[Table E4](./Figures_Tables/Supplementary/TableE4.ipynb) Multivariable associations of image-expression axes (IEAs) to continuous COPD-related characteristics and health outcomes. 
+[Table E3](./Figures_Tables/Supplementary/TableE3.ipynb) Logistic regression and Cox proportional harzard models with image-expression axes (IEAs) and COPD measurements with COPDGene visit 2 data. 
 
-[Table E5](./Figures_Tables/Supplementary/TableE5.ipynb) Multivariable associations of image-expression axes (IEAs) to Frequent Exacerbators and Mortality. 
+[Table E4](./Figures_Tables/Supplementary/TableE4.ipynb) Pearson’s correlation between image-expression axes (IEAs) and COPD-related characteristics and health outcomes, measured on 1,527 subjects from another subset of the COPDGene dataset that had not been used for model training.  
 
-[Table E6](./Figures_Tables/Supplementary/TableE6.ipynb) Pearson correlation coefficients among image-expression axes (IEAs), factor analysis axes (FAs) and PCA image only axes (PCA-I), COPD-related characteristics and health outcomes. 
+[Table E5](./Figures_Tables/Supplementary/TableE5.ipynb) Linear Regression with image-expression axes (IEAs) and COPD measurements with 1,527 subjects from another subset of the COPDGene dataset that had not been used for model training.   
 
-[Table E7](./Figures_Tables/Supplementary/TableE7.ipynb) Multivariable associations of image-expression axes (IEAs) and factor analysis axes (FAs) to continuous COPD-related characteristics and health outcomes. 
+[Table E6](./Figures_Tables/Supplementary/TableE6.ipynb) Logistic regression and Cox proportional harzard models with image-expression axes (IEAs) and COPD measurements with 1,527 subjects from another subset of the COPDGene dataset that had not been used for model training.  
 
-[Table E8](./Figures_Tables/Supplementary/TableE8.ipynb) Multivariable associations of image-expression axes (IEAs) and factor analysis axes (FAs) to Frequent Exacerbators and Mortality. 
+[Table E7](./Figures_Tables/Supplementary/TableE7.ipynb) Characteristics of subgroups defined by diving the Image-Expression Axes (IEAs) into quadrants. 
 
+[Table E8](./Figures_Tables/Supplementary/TableE8.ipynb) Covariances between Image-expression Axes (IEAs), factor analysis axes (FAs), and PCA image-only axes (PCA-Is) on COPDGene visit 1 data. 
 
-[Table E9](./Figures_Tables/Supplementary/TableE9.ipynb)  Multivariable associations of image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) to continuous COPD-related characteristics and health outcomes. 
+[Table E9](./Figures_Tables/Supplementary/TableE9.ipynb) Pearson correlation coefficients among image-expression axes (IEAs), factor analysis axes (FAs) and PCA image only axes (PCA-Is), COPD-related characteristics and health outcomes. 
 
-[Table E10](./Figures_Tables/Supplementary/TableE10.ipynb) Multivariable associations of image-expression axes (IEAs) and PCA Image Only Axes (PCA-I) to Frequent Exacerbators and Mortality. 
+[Table E10](./Figures_Tables/Supplementary/TableE10.ipynb) Linear regression analysis with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data.
 
-[Figure E2](./Figures_Tables/Supplementary/FigureE2.ipynb) Variance of gene expression explained by IEAs as we variate the number of IEAs. 
+[Table E11](./Figures_Tables/Supplementary/TableE11.ipynb) Logistic regression and Cox model with image-expression axes (IEAs) and factor analysis axes (FAs) on COPDGene visit 1 data. 
 
-[Figure E4](./Figures_Tables/Supplementary/FigureE4.ipynb) Histograms for the variance of gene expression explained by the IEAs and PCA-I. 
+[Table E12](./Figures_Tables/Supplementary/TableE12.ipynb) Linear regression analysis with image-expression axes (IEAs) and PCA Image Only Axes (PCA-Is) on COPDGene visit 1 data. 
 
+[Table E13](./Figures_Tables/Supplementary/TableE13.ipynb) Logistic regression and Cox model with image-expression axes (IEAs) and PCA Image Only Axes (PCA-Is) on COPDGene visit 1 data. 
+
+[Table E18](./Figures_Tables/Supplementary/TableE18.ipynb) The correlation between perc15 ratio and IEAs.
 
 
 
