@@ -10,7 +10,7 @@ We identified two distinct IEAs that capture most of the relationship between CT
   <img width="75%" height="%75" src="https://github.com/batmanlab/IEA/blob/main/Figures_Tables/summary.png">
 </p>
 
-The data analysis can be separated into the following 4 parts: 1) Register and patchify the CT scans; 2) Extact the features from the processed CT scans; 3) Select genes based on the association between gene expression and extracted image features; 4) Train the deep learning model that identify IEA using the image features and the expression levels of the selected genes. We provide the code for step 3 and 4 in this repository.
+The data analysis can be separated into the following 4 parts: 1) Register and patchify the CT scans; 2) Extract the features from the processed CT scans; 3) Select genes based on the association between gene expression and extracted image features; 4) Train the deep learning model that identifies IEA using the image features and the expression levels of the selected genes. We provide the code for steps 3 and 4 in this repository. The code for steps 1 and 2 is given in [https://github.com/batmanlab/Context_Aware_SSL](https://github.com/batmanlab/Context_Aware_SSL). 
 
 # Generate the IEAs
 The IEAs can be generated with the following steps:
