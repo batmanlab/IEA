@@ -50,7 +50,7 @@ To generate the [Supplemental Table E1](./Figures_Tables/Supplementary/TableE1.i
 chmod +x ./src/gene_thresholds.sh
 ./src/gene_thresholds.sh 
 ```
-To generate [Figure 5](./Figures_Tables/main_text/Figure5.ipynb), it is required to variate the number of IEAs when training the IEA models. To train these models, run the following script:
+To generate [Figure 2](./Figures_Tables/main_text/Figure2.ipynb), it is required to variate the number of IEAs when training the IEA models. To train these models, run the following script:
 ```
 chmod +x ./src/num_IEAs.sh
 ./src/num_IEAs.sh 
